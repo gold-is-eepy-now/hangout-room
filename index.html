@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hangout Room VR Prototype</title>
+    <meta
+      name="description"
+      content="A first WebXR prototype for a Quest, PCVR, and Steam Frame friendly social hangout room."
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <main class="landing" id="landing">
+      <section class="hero-panel">
+        <p class="eyebrow">First playable WebXR prototype</p>
+        <h1>Hangout Room</h1>
+        <p>
+          A cozy school-cafeteria social VR space with dorm-room portals,
+          toy props, basketball practice, frisbee throws, and confetti chaos.
+        </p>
+        <div class="button-row">
+          <button id="enterPrototype" type="button">Enter prototype</button>
+          <a href="./docs/prototype-scope.md">Read scope</a>
+          <a href="./LICENSE">Source / License</a>
+        </div>
+        <ul class="feature-list" aria-label="Prototype highlights">
+          <li>Quest Browser, PCVR browsers, and SteamVR/WebXR friendly scene.</li>
+          <li>Teleport-style points of interest for cafeteria and dorm areas.</li>
+          <li>Clickable basketball, frisbee, and confetti launch prototypes.</li>
+        </ul>
+      </section>
+    </main>
+
+    <div class="hud" id="hud" hidden>
+      <strong id="hudTitle">Cafeteria Commons</strong>
+      <span id="hudHint">Desktop: click props to launch. VR: use trigger/laser pointer.</span>
+      <button id="resetScene" type="button">Reset toys</button>
+    </div>
+
+    <a-scene
+      id="scene"
+      embedded
+      vr-mode-ui="enabled: true"
+      renderer="colorManagement: true; physicallyCorrectLights: true"
+      background="color: #f5d59e"
+      raycaster="objects: .interactive"
+      cursor="rayOrigin: mouse"
+      visible="false"
+    >
+      <a-assets>
+        <a-mixin id="toyText" text="align: center; color: #31233f; width: 3.5"></a-mixin>
+        <a-mixin id="buttonMat" material="color: #ffcf4a; roughness: 0.7"></a-mixin>
+      </a-assets>
+
+      <a-entity light="type: ambient; color: #fff2cf; intensity: 1.2"></a-entity>
+      <a-entity light="type: directional; color: #ffffff; intensity: 1.8" position="-4 8 3"></a-entity>
+
+      <a-entity id="rig" position="0 1.6 7">
+        <a-camera wasd-controls="acceleration: 28" look-controls>
+          <a-entity
+            cursor="fuse: false; rayOrigin: mouse"
+            raycaster="objects: .interactive"
+            position="0 0 -1"
+            geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.018"
+            material="color: #ffffff; shader: flat"
+          ></a-entity>
+        </a-camera>
+        <a-entity laser-controls="hand: left" raycaster="objects: .interactive"></a-entity>
+        <a-entity laser-controls="hand: right" raycaster="objects: .interactive"></a-entity>
+      </a-entity>
+
+      <!-- Cafeteria shell -->
+      <a-plane rotation="-90 0 0" width="24" height="20" color="#f7bd64"></a-plane>
+      <a-box position="0 2 -3" depth="0.35" height="4" width="24" color="#f19a50"></a-box>
+      <a-box position="-12 2 0" depth="20" height="4" width="0.35" color="#e27d56"></a-box>
+      <a-box position="12 2 0" depth="20" height="4" width="0.35" color="#e27d56"></a-box>
+      <a-box position="0 4.1 0" depth="20" height="0.25" width="24" color="#ffc978"></a-box>
+
+      <a-text value="Cafeteria Commons" position="0 3.4 -3.22" align="center" color="#43224c" width="8"></a-text>
+      <a-box position="0 1.8 -3.42" width="5.6" height="1.4" depth="0.08" color="#ffd86b"></a-box>
+      <a-text
+        value="Meet up, play, and portal to dorms"
+        position="0 1.92 -3.49"
+        align="center"
+        color="#43224c"
+        width="4.5"
+      ></a-text>
+
+      <!-- Tables and seating -->
+      <a-entity id="tables">
+        <a-cylinder position="-4 0.55 0" radius="1.15" height="0.16" color="#3ec0a2"></a-cylinder>
+        <a-cylinder position="-4 0.26 0" radius="0.12" height="0.55" color="#714d3d"></a-cylinder>
+        <a-cylinder position="3.9 0.55 0.4" radius="1.15" height="0.16" color="#59a9ff"></a-cylinder>
+        <a-cylinder position="3.9 0.26 0.4" radius="0.12" height="0.55" color="#714d3d"></a-cylinder>
+        <a-box position="-4 0.35 1.5" width="2.4" height="0.28" depth="0.5" color="#ffc266"></a-box>
+        <a-box position="-4 0.35 -1.5" width="2.4" height="0.28" depth="0.5" color="#ffc266"></a-box>
+        <a-box position="3.9 0.35 1.9" width="2.4" height="0.28" depth="0.5" color="#ffc266"></a-box>
+        <a-box position="3.9 0.35 -1.1" width="2.4" height="0.28" depth="0.5" color="#ffc266"></a-box>
+      </a-entity>
+
+      <!-- Activity zone -->
+      <a-entity id="basketball-zone" position="7 0 -1">
+        <a-box position="0 1.8 -1.9" width="0.12" height="2.8" depth="0.12" color="#55505e"></a-box>
+        <a-box position="0 3.0 -2.15" width="1.5" height="0.9" depth="0.08" color="#e9f3ff"></a-box>
+        <a-torus position="0 2.65 -2.72" rotation="90 0 0" radius="0.42" radius-tubular="0.035" color="#ff6b3a"></a-torus>
+        <a-sphere
+          class="interactive"
+          projectile-spawner="kind: basketball; color: #df7a32; radius: 0.23; velocity: -0.4 1.7 -5.2"
+          position="-1.2 0.82 1.2"
+          radius="0.24"
+          color="#df7a32"
+        ></a-sphere>
+        <a-text mixin="toyText" value="Click basketball to shoot" position="0 0.15 1.5"></a-text>
+      </a-entity>
+
+      <a-entity id="toy-zone" position="-7 0 2">
+        <a-cylinder
+          class="interactive"
+          projectile-spawner="kind: frisbee; color: #54d3ff; radius: 0.32; velocity: 4.6 1.1 -2.2"
+          position="0 0.85 0"
+          radius="0.36"
+          height="0.08"
+          rotation="90 0 0"
+          color="#54d3ff"
+        ></a-cylinder>
+        <a-box
+          class="interactive"
+          projectile-spawner="kind: confetti; color: #ff58c7; radius: 0.08; velocity: 4 2 -2"
+          position="1.2 0.85 0"
+          width="0.5"
+          height="0.28"
+          depth="0.28"
+          color="#ff58c7"
+        ></a-box>
+        <a-text mixin="toyText" value="Frisbee + confetti toys" position="0.55 0.15 0.65"></a-text>
+      </a-entity>
+
+      <!-- Dorm portal and dorm vignette -->
+      <a-box
+        class="interactive"
+        id="dormPortal"
+        portal-toggle
+        position="-8 1.2 -2.8"
+        width="1.6"
+        height="2.4"
+        depth="0.12"
+        color="#7b5cff"
+      ></a-box>
+      <a-text value="Dorm Portal" position="-8 2.75 -2.95" align="center" color="#43224c" width="3"></a-text>
+
+      <a-entity id="dormRoom" visible="false" position="0 0 13">
+        <a-plane rotation="-90 0 0" width="9" height="7" color="#a9d6ff"></a-plane>
+        <a-box position="0 2 -3.5" width="9" height="4" depth="0.22" color="#8fb8f2"></a-box>
+        <a-box position="-4.5 2 0" width="0.22" height="4" depth="7" color="#8fb8f2"></a-box>
+        <a-box position="4.5 2 0" width="0.22" height="4" depth="7" color="#8fb8f2"></a-box>
+        <a-box position="-2 0.45 -1.4" width="2.8" height="0.5" depth="1.4" color="#ff9fb0"></a-box>
+        <a-box position="-2 0.9 -1.4" width="2.6" height="0.35" depth="1.2" color="#ffe0ed"></a-box>
+        <a-box position="2.1 1.05 -1" width="1.5" height="1.8" depth="0.5" color="#ffd86b"></a-box>
+        <a-text value="Your Dorm Room" position="0 2.75 -3.62" align="center" color="#263050" width="5"></a-text>
+      </a-entity>
+
+      <!-- Other players placeholders -->
+      <a-entity id="avatar-standins">
+        <a-sphere position="-1.5 1.55 2" radius="0.28" color="#6c5cff"></a-sphere>
+        <a-cylinder position="-1.5 0.9 2" radius="0.22" height="0.9" color="#31c48d"></a-cylinder>
+        <a-sphere position="1.2 1.55 2.5" radius="0.28" color="#ff7a59"></a-sphere>
+        <a-cylinder position="1.2 0.9 2.5" radius="0.22" height="0.9" color="#7dd3fc"></a-cylinder>
+      </a-entity>
+
+      <a-entity id="projectiles"></a-entity>
+    </a-scene>
+  </body>
+</html>

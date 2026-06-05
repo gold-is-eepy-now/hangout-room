@@ -1,0 +1,17 @@
+{
+  "name": "hangout-room",
+  "version": "0.1.0",
+  "description": "A WebXR first prototype for a social VR hangout space with cafeteria, dorm, and playful activities.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --check src/app.js && node scripts/validate-static-assets.mjs"
+  },
+  "keywords": [
+    "webxr",
+    "vr",
+    "hangout",
+    "prototype"
+  ],
+  "license": "AGPL-3.0-or-later"
+}
